@@ -4,52 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Froze Bank — Adam</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--muted:#9aa6b2}
-    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071029 0%, #071a2a 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .wrap{width:100%;max-width:980px}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#7dd3fc,#60a5fa);display:flex;align-items:center;justify-content:center;color:#052033;font-weight:700;font-size:18px}
-    h1{margin:0;font-size:20px}
-    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
-    .card{background:rgba(255,255,255,0.03);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-    .qr{display:flex;flex-direction:column;align-items:center;gap:12px}
-    img.qrimg{width:240px;height:240px;border-radius:8px;border:4px solid rgba(255,255,255,0.03);background:#fff;padding:6px}
-    .small{font-size:13px;color:var(--muted)}
-    .controls{display:flex;gap:8px;margin-top:8px}
-    button{background:var(--accent);border:none;padding:10px 12px;border-radius:8px;color:#052033;font-weight:600;cursor:pointer}
-    .chat{display:flex;flex-direction:column;height:520px}
-    .messages{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:8px}
-    .inputBar{display:flex;gap:8px;margin-top:8px}
-    .bubble{max-width:72%;padding:10px;border-radius:12px}
-    .user{align-self:flex-end;background:linear-gradient(90deg,#0ea5a4,#34d399);color:#042021;border-bottom-right-radius:4px}
-    .bot{align-self:flex-start;background:rgba(255,255,255,0.03);color:#e6eef6;border-bottom-left-radius:4px}
-    input[type="text"]{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-    .hint{font-size:13px;color:var(--muted);margin-top:8px}
-    .small-muted{font-size:12px;color:var(--muted)}
-    footer{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="logo">
-  <img src="./assets/logo.png" alt="Froze Bank" style="width:100%;height:100%;object-fit:cover;border-radius:10px" />
-</div>
-
+        <img src="assets/logo.png" alt="Froze Bank" />
+      </div>
+      <div>
         <h1>Froze Bank — Adam</h1>
         <div class="small">Escanea el QR para abrir esta web en tu móvil y hablar con Adam</div>
       </div>
     </header>
 
     <div class="grid">
-      <!-- PANEL IZQUIERDO: QR y acciones -->
       <aside class="card qr">
         <div style="text-align:center">
           <div class="small">Escanea con la cámara del teléfono</div>
         </div>
         <img id="qrImg" class="qrimg" alt="QR Froze Bank" />
-        <div class="small-muted">QR dinámico que apunta a esta URL. Para compartir: abre la página en tu laptop y que otro la escanee.</div>
+        <div class="small-muted">QR dinámico que apunta a esta URL.</div>
 
         <div style="width:100%;margin-top:12px">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -57,17 +32,10 @@
             <button id="depositBtn">Simular depósito +RD$50</button>
             <button id="downloadQR">Descargar QR</button>
           </div>
-          <div class="hint">La hucha real sincronizaría balance desde los sensores; aquí simulamos para la demo.</div>
-        </div>
-
-        <div style="margin-top:12px;font-size:13px;color:var(--muted)">
-          <strong>Instrucciones:</strong>
-          <div>- Subir este archivo a GitHub Pages.</div>
-          <div>- Abrir la URL en el navegador (desktop) y mostrar QR para que lo escaneen.</div>
+          <div class="hint">Demo: la hucha real sincronizaría balance desde los sensores.</div>
         </div>
       </aside>
 
-      <!-- PANEL DERECHO: Chat -->
       <main class="card chat">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
           <div><strong>Chat con Adam</strong><div class="small">Escribe o usa los botones para probar.</div></div>
@@ -82,148 +50,16 @@
         </div>
 
         <div class="small-muted" style="margin-top:6px">
-          Para integrar con IA real (Hugging Face u OpenAI), sigue las instrucciones en el código comentado.
+          Para integrar con IA real, conecta tu backend seguro y reemplaza la sección de demo.
         </div>
       </main>
     </div>
 
     <footer>
-      Froze Bank · Demo rápido • GitHub Pages + QR • Reemplaza la parte de IA por tu endpoint cuando estés listo.
+      Froze Bank · Demo rápido • GitHub Pages + QR
     </footer>
   </div>
 
-  <script>
-    /***** Datos de demo (simulación local) *****/
-    let balance = Number(localStorage.getItem('froze_balance') || 120.00); // saldo inicial demo
-    const messagesEl = document.getElementById('messages');
-
-    function appendMessage(text, who='bot'){
-      const div = document.createElement('div');
-      div.className = 'bubble ' + (who === 'user' ? 'user' : 'bot');
-      div.textContent = text;
-      messagesEl.appendChild(div);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    // Mostrar mensaje de bienvenida
-    appendMessage('Hola, soy Adam — tu asistente de Froze Bank. Pregúntame algo o pulsa "¿Cuánto tengo?"');
-
-    /***** QR dinámico: apunta a la URL actual *****/
-    function buildQR(url){
-      // Usamos Google Chart API para generar un QR en línea
-      return 'https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=' + encodeURIComponent(url);
-    }
-    const qrImg = document.getElementById('qrImg');
-    qrImg.src = buildQR(window.location.href);
-
-    document.getElementById('downloadQR').addEventListener('click', () => {
-      const a = document.createElement('a');
-      a.href = qrImg.src;
-      a.download = 'froze-bank-qr.png';
-      a.click();
-    });
-
-    /***** Botones de la columna izquierda *****/
-    document.getElementById('showBalanceBtn').addEventListener('click', () => {
-      appendMessage(`Tu balance actual es RD$ ${balance.toFixed(2)}`);
-    });
-
-    document.getElementById('depositBtn').addEventListener('click', () => {
-      balance += 50;
-      localStorage.setItem('froze_balance', balance.toFixed(2));
-      appendMessage('Depósito simulado: +RD$50 ✅\n' + `Nuevo balance: RD$ ${balance.toFixed(2)}`);
-    });
-
-    /***** Chat: manejo simple + integración opcional con IA remota *****/
-    document.getElementById('sendBtn').addEventListener('click', sendMessage);
-    document.getElementById('msgInput').addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
-
-    async function sendMessage(){
-      const input = document.getElementById('msgInput');
-      const text = input.value.trim();
-      if(!text) return;
-      appendMessage(text, 'user');
-      input.value = '';
-
-      // Respuestas locales (simples) — útiles para demo offline
-      const lText = text.toLowerCase();
-      if(lText.includes('cuánto') || lText.includes('balance') || lText.includes('tengo')){
-        appendMessage(`Tienes RD$ ${balance.toFixed(2)} (dato demo)`);
-        return;
-      }
-      if(lText.includes('meta') || lText.includes('viaje') || lText.includes('ahorrar')){
-        appendMessage('Consejo: Si ahorras RD$50 semanales en 6 meses tendrías un ahorro extra significativo. ¿Quieres que calcule?');
-        return;
-      }
-
-      // Si quieres usar IA remota (Hugging Face / OpenAI), descomenta y adapta la sección siguiente.
-      // ---- INTEGRACIÓN (ejemplo Hugging Face) ----
-      /*
-      try {
-        // Reemplaza 'TU_TOKEN_HF' por tu token de Hugging Face (guárdalo en tu backend en producción, no en frontend)
-        const HF_TOKEN = 'TU_TOKEN_HF';
-        const modelUrl = 'https://api-inference.huggingface.co/models/gpt2'; // reemplaza por modelo deseado
-        const res = await fetch(modelUrl, {
-          method: 'POST',
-          headers: { Authorization: 'Bearer ' + HF_TOKEN, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ inputs: text, parameters: { max_new_tokens: 150 } })
-        });
-        const data = await res.json();
-        const reply = (data.generated_text || (data[0] && data[0].generated_text)) || 'Lo siento, no entendí.';
-        appendMessage(reply);
-      } catch(err){
-        appendMessage('Error al contactar IA: ' + err.message);
-      }
-      return;
-      */
-      // --------------------------------------------
-
-      // Respuesta por defecto si no hay IA
-      appendMessage('Adam: Interesante. (Demo local) — en producción te daría recomendaciones personalizadas.');
-    }
-
-    /***** NOTAS IMPORTANTES sobre integración real de IA *****
-      - No pongas tokens privados en el front (HTML). Usa un backend que reciba la pregunta y haga la llamada a la API de Hugging Face / OpenAI.
-      - Para un MVP sin backend: puedes usar Hugging Face Inference API con límite bajo, pero la práctica segura es crear un endpoint propio.
-      - Para que Adam muestre el balance real desde la hucha física, el ESP32 debe enviar el balance al backend (WebSocket o HTTP) y la app/web pedirlo con autenticación.
-    ******************************************************/
-  </script>
+  <script src="dist/main.js"></script>
 </body>
 </html>
-<style> 
-  /* 1) sutil brillo en logo */
-.logo img{transition:transform .35s ease, box-shadow .35s ease}
-.logo img:hover{transform:translateY(-4px) scale(1.03); box-shadow:0 12px 30px rgba(0,0,0,0.45)}
-
-/* 2) efecto hover en botones */
-button{transition:transform .18s ease, box-shadow .18s ease}
-button:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(3,10,22,0.45)}
-
-/* 3) pulso suave en QR para llamar la atención */
-@keyframes pulse {0%{transform:scale(1)}50%{transform:scale(1.025)}100%{transform:scale(1)}}
-img.qrimg{animation: pulse 4s ease-in-out infinite}
-<script>
-// efecto visual simple al depositar
-function flashCoinEffect(){
-  const el = document.querySelector('.logo') || document.body;
-  const coin = document.createElement('div');
-  coin.textContent = '¢';
-  coin.style.position = 'absolute';
-  coin.style.fontSize = '22px';
-  coin.style.opacity = '0.95';
-  coin.style.transform = 'translateY(-20px)';
-  coin.style.left = (el.getBoundingClientRect().left + 20) + 'px';
-  coin.style.top = (el.getBoundingClientRect().top + 6) + 'px';
-  coin.style.transition = 'transform .9s cubic-bezier(.2,.9,.2,1), opacity .9s';
-  document.body.appendChild(coin);
-  requestAnimationFrame(()=> coin.style.transform = 'translateY(-160px) scale(1.2)');
-  setTimeout(()=> { coin.style.opacity = '0'; }, 600);
-  setTimeout(()=> coin.remove(), 1000);
-}
-document.getElementById('depositBtn').addEventListener('click', () => {
-  balance += 50;
-  localStorage.setItem('froze_balance', balance.toFixed(2));
-  appendMessage('Depósito simulado: +RD$50 ✅\n' + `Nuevo balance: RD$ ${balance.toFixed(2)}`);
-  flashCoinEffect();
-});
-  
