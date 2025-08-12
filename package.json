@@ -1,0 +1,11 @@
+{
+  "name": "froze-bank-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npx tsc && mkdir -p dist-site && cp index.html style.css dist/main.js dist-site/ || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
