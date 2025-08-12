@@ -190,3 +190,40 @@
   </script>
 </body>
 </html>
+<style> 
+  /* 1) sutil brillo en logo */
+.logo img{transition:transform .35s ease, box-shadow .35s ease}
+.logo img:hover{transform:translateY(-4px) scale(1.03); box-shadow:0 12px 30px rgba(0,0,0,0.45)}
+
+/* 2) efecto hover en botones */
+button{transition:transform .18s ease, box-shadow .18s ease}
+button:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(3,10,22,0.45)}
+
+/* 3) pulso suave en QR para llamar la atención */
+@keyframes pulse {0%{transform:scale(1)}50%{transform:scale(1.025)}100%{transform:scale(1)}}
+img.qrimg{animation: pulse 4s ease-in-out infinite}
+<script>
+// efecto visual simple al depositar
+function flashCoinEffect(){
+  const el = document.querySelector('.logo') || document.body;
+  const coin = document.createElement('div');
+  coin.textContent = '¢';
+  coin.style.position = 'absolute';
+  coin.style.fontSize = '22px';
+  coin.style.opacity = '0.95';
+  coin.style.transform = 'translateY(-20px)';
+  coin.style.left = (el.getBoundingClientRect().left + 20) + 'px';
+  coin.style.top = (el.getBoundingClientRect().top + 6) + 'px';
+  coin.style.transition = 'transform .9s cubic-bezier(.2,.9,.2,1), opacity .9s';
+  document.body.appendChild(coin);
+  requestAnimationFrame(()=> coin.style.transform = 'translateY(-160px) scale(1.2)');
+  setTimeout(()=> { coin.style.opacity = '0'; }, 600);
+  setTimeout(()=> coin.remove(), 1000);
+}
+document.getElementById('depositBtn').addEventListener('click', () => {
+  balance += 50;
+  localStorage.setItem('froze_balance', balance.toFixed(2));
+  appendMessage('Depósito simulado: +RD$50 ✅\n' + `Nuevo balance: RD$ ${balance.toFixed(2)}`);
+  flashCoinEffect();
+});
+  
